@@ -1,0 +1,69 @@
+﻿@using CinemaHW.Persistence
+@model RentViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Foglalás</h1>
+<div class="container" style="width: 85%; font-size:20px; color:black;">
+    <form class="container" style="width: 85%;" asp-controller="Rents" asp-action="Index" asp-route-id="@Model.Program.Id">
+        <table>
+            <tr>
+                <td colspan="2" valign="middle">
+                    @* globális modellhibák megjelenítése *@
+                    <div asp-validation-summary="ModelOnly" class="failureNotification"></div>
+
+                    <div class="contentHead">
+                        Személyes adatok:
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                @for (int i = 0; i < Model.Row; i++)
+                {
+                    <span class="text-left">@(i+1). sor</span>
+                    <div class="form-check form-check-inline">
+                        @for (int j = 0; j < Model.Col; j++)
+                        {
+                            //Model.ReservedPlaces.Contains(new Places { Line = i, Column = j })
+                            if (Model.ReservedPlaces.FirstOrDefault(p => p.Line == i && p.Column == j) != null)
+                            {
+                                <label class="btn"><img src="~/reservedPlace.png" width="35" height="60"></label>
+                            }
+                            else
+                            {
+                                <label class="btn reservation"> <img src="~/emptyPlace.png" width="35 height="60"> @Html.CheckBox("ulesek[" + @i + @j + "]", false, new { @class = "asd" })</label>
+                            }
+                        }
+                    </div>
+                    <br />
+                }
+            </tr>
+            <tr>
+                <td width="120">
+                    Név:
+                </td>
+                <td class="failureNotification">
+                    <input asp-for="UserFullName" size="20" style="color:black"/>
+                    <span asp-validation-for="UserFullName"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Telefonszám:
+                </td>
+                <td class="failureNotification">
+                    <input asp-for="UserPhoneNumber" size="20" style="color:black"/>
+                    <span asp-validation-for="UserPhoneNumber"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right">
+                    <input type="submit" value="Foglalás" class="button btn-success" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    </div>
+

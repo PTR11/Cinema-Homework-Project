@@ -1,0 +1,148 @@
+﻿<Window x:Class="CinemaHW.Desktop.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="TodoList" Height="500" Width="800">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="ContentRendered">
+            <i:InvokeCommandAction Command="{Binding RefreshListsCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Refresh lists" Command="{Binding RefreshListsCommand}" />
+            <MenuItem Header="_Logout" Command="{Binding LogoutCommand}" />
+        </Menu>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Row="0" Grid.ColumnSpan="2">
+                <GroupBox.Header>
+                    <Label Content="Movies:" />
+                </GroupBox.Header>
+                <DataGrid ItemsSource="{Binding Movies}"
+                      VerticalContentAlignment="Stretch"  IsReadOnly="True"
+                      AutoGenerateColumns="False" HeadersVisibility="None"
+                      SelectedItem="{Binding SelectedMovie}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction
+                                Command="{Binding SelectCommand}"
+                                CommandParameter="{
+                                    Binding Path=SelectedItem,
+                                    RelativeSource={
+                                        RelativeSource
+                                        AncestorType={x:Type DataGrid},
+                                        AncestorLevel=1}}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Title}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
+                <Button Width="73"  Height="21" Margin="5" Content="Add Movie" Command="{Binding AddMovieCommand}" />
+                <Button Width="73"  Height="21" Margin="5" Content="Edit Movie" Command="{Binding EditMovieCommand}" />
+                <Button Width="73"  Height="21" Margin="5" Content="Delete Movie" Command="{Binding DeleteMovieCommand}"/>
+            </StackPanel>
+
+            <GroupBox Grid.Row="2" Grid.ColumnSpan="2">
+                <GroupBox.Header>
+                    <Label Content="Programs:" />
+                </GroupBox.Header>
+                <DataGrid ItemsSource="{Binding Programs}"
+                      VerticalContentAlignment="Stretch"  IsReadOnly="True"
+                      AutoGenerateColumns="False" HeadersVisibility="None"
+                      SelectedItem="{Binding SelectedProgram}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Interval}" Width="*" />
+                        <DataGridTextColumn Binding="{Binding MovieTitle}" Width="*" />
+                        <DataGridTextColumn Binding="{Binding RoomId}" />
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding TicketSellCommand}">Sell Tickets</Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.Column="0">
+                <Button Width="Auto"  Height="21" Margin="5" Content="Add Program" Command="{Binding AddProgramCommand}" />
+                <Button Width="Auto"  Height="21" Margin="5" Content="Edit Program" Command="{Binding EditProgramCommand}" />
+                <Button Width="Auto"  Height="21" Margin="5" Content="Delete Program" Command="{Binding DeleteProgramCommand}" />
+            </StackPanel>
+
+            <GroupBox Grid.Row="4" Grid.Column="0">
+                <GroupBox.Header>
+                    <Label Content="Places:" />
+                </GroupBox.Header>
+                <DataGrid ItemsSource="{Binding Places}"
+                      VerticalContentAlignment="Stretch"  IsReadOnly="True"
+                      AutoGenerateColumns="False" HeadersVisibility="None"
+                      SelectedItem="{Binding SelectedPlace}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectPlaceCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Line}" Width="*" />
+                        <DataGridTextColumn Binding="{Binding Column}" Width="*" />
+                        <DataGridTextColumn Binding="{Binding StatusName}" />
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding AddSellingListCommand}">Sell</Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+            <GroupBox Grid.Row="4" Grid.Column="1">
+                <GroupBox.Header>
+                    <Label Content="Selling places:" />
+                </GroupBox.Header>
+                <DataGrid ItemsSource="{Binding SellingPlaces}"
+                      VerticalContentAlignment="Stretch"  IsReadOnly="True"
+                      AutoGenerateColumns="False" HeadersVisibility="None" SelectedItem="{Binding SelectedPlaceInSelling}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding DeletePlaceFromSelling}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Line}" Width="*" />
+                        <DataGridTextColumn Binding="{Binding Column}" Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+            <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.Column="0">
+                <Label>Name:</Label>
+                <Label Content="{Binding SelectedUser.FullName}"></Label>
+                <Label>Phone Number:</Label>
+                <Label Content="{Binding SelectedUser.PhoneNumber}"></Label>
+            </StackPanel>
+            <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.Column="1">
+                <Button Width="Auto"  Height="21" Margin="5" Content="Sell Places" Command="{Binding SellAllPlacesCommand}" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>

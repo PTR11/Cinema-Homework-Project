@@ -1,0 +1,100 @@
+﻿@using CinemaHW.Persistence
+@model MovieViewModel
+
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container" style="width: 75%; font-size:20px">
+
+    <h4>@Model.movie.Title</h4>
+    <img src="@Url.Action("ImageForMovies", new MoviesImage{ Id = Model.movie.Id })" width="50%" />
+    <table class="table">
+        <tbody>
+            <tr>
+                <td width="150px" class="text-left">Rendező:</td>
+                <td class="text-right">
+                    @Model.movie.Director
+                </td>
+            </tr>
+            <tr>
+                <td width="150px" class="text-left">Film hossza:</td>
+                <td class="text-right">
+                    @Model.movie.Length perc
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" class="text-left">Szereplők:</td>
+                <td class="text-right">
+                    <p style="margin-bottom:0">
+                        @foreach (Actors act in Model.movie.Actors)
+                        {
+                            if (act == Model.movie.Actors.Last())
+                            {
+                                @act.Name
+                            }
+                            else
+                            {
+                                @act.Name <br />
+                            }
+                        }
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" class="text-left">Leírás:</td>
+                <td class="text-justify">
+                    <span>@Model.movie.Description</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+    <h4 class="text-left">Előadások ma</h4>
+    @if (Model.program.Count == 0)
+    {
+        <h4>A mai napra nincsen előadás ehhez a filmhe</h4>
+    }
+    else
+    {
+        <table class="table table-hover">
+            <thead>
+            <thead>
+                <tr>
+                    <th scope="col">Terem</th>
+                    <th scope="col">Méret</th>
+                    <th scope="col">Időpont</th>
+
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.program)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RoomId).
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Room.Line) sor
+                            @Html.DisplayFor(modelItem => item.Room.Column) oszlop
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date.Hour):@Html.DisplayFor(modelItem => item.Date.Minute)
+                        </td>
+
+                        <td>
+                            <a class="badge badge-success" asp-action="Index" asp-controller="Rents" asp-route-pId="@item.Id">Foglalás</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>
+<div>
+    <a asp-action="Index" asp-controller="Home">Visszalépés</a>
+</div>

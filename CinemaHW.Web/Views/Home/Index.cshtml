@@ -1,0 +1,54 @@
+﻿@using CinemaHW.Persistence
+
+@model ViewModel
+
+
+
+<div class=" accordion" style="width: 75%; padding: 0 15px; ">
+    <h1>Legújabb filmek:</h1>
+    <ul>
+        @foreach (var item in Model.lastUploadedMovies)
+        {
+        <li style="background-image: url(@Url.Action("ImageForMovies", new MoviesImage{ Id = item.Id,MovieId = item.Id })); background-position: 50% 30%;">
+            <div>
+                <a asp-action="Details" asp-controller="Movies" asp-route-id="@item.Id" class="sliderLink">
+                    <h2>@Html.DisplayFor(modelItem => item.Title)</h2>
+
+                    <p>@Html.DisplayFor(modelItem => item.Length) perc</p>
+
+                </a>
+            </div>
+        </li>
+        }
+    </ul>
+</div>
+<h1>Aktuális program</h1>
+
+<div class="container" style="width: 75%;">
+    <table class="table" >
+
+        <tbody>
+            @foreach (var item in Model.todaysProgram)
+            {
+                <tr>
+                    <td class="text-left"> 
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td class="text-center">
+                        @Html.DisplayFor(modelItem => item.Length) perc
+                    </td>
+                    <td>
+                        <a class="badge badge-success" asp-action="Details" asp-controller="Movies" asp-route-id="@item.Id">Részletek</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+@*<div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a asp-controller="Movies">building Web apps with ASP.NET Core</a>.</p>
+    </div>*@
